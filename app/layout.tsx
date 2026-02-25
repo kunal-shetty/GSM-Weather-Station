@@ -1,35 +1,30 @@
 import type React from "react"
 import type { Metadata, Viewport } from "next"
 import { Inter, JetBrains_Mono } from "next/font/google"
-import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 
-const _inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
-const _jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" })
+const _inter = Inter({ subsets: ["latin"] })
+const _jetbrainsMono = JetBrains_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "GSM Weather Station",
+  title: "GSM WeatherLink - Remote Monitoring System",
   description:
-    "Low-cost automated weather monitoring system for remote areas without internet - uses GSM/SMS for real-time updates",
-  generator: "v0.app",
+    "Low-cost automated weather monitoring for remote areas using GSM/SMS communication. No internet required.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "GSM Weather",
-  },
-  formatDetection: {
-    telephone: false,
+    title: "WeatherLink",
   },
   icons: {
     icon: "/icon-192.jpg",
     apple: "/icon-512.jpg",
   },
-  keywords: ["weather monitoring", "GSM", "SMS", "agriculture", "remote monitoring", "IoT", "sensors"],
+    generator: 'v0.app'
 }
 
 export const viewport: Viewport = {
-  themeColor: "#f9fafb",
+  themeColor: "#1a9a6c",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -44,10 +39,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="font-sans antialiased">
-        {children}
-        <Analytics />
-      </body>
+      <body className="font-sans antialiased">{children}</body>
     </html>
   )
 }

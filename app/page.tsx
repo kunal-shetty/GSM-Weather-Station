@@ -2,66 +2,51 @@
 
 import { useEffect, useState } from "react"
 import { OnboardingScreen } from "@/components/onboarding-screen"
-import { WeatherDashboard } from "@/components/weather-dashboard"
+import { AppShell } from "@/components/app-shell"
 import { Radio } from "lucide-react"
-
-export interface UserData {
-  fullName: string
-  phoneNumber: string
-  location: string
-  countryCode: string
-  stationId: string
-}
+import type { UserData } from "@/lib/weather"
 
 export default function Home() {
   const [user, setUser] = useState<UserData | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [ready, setReady] = useState(false)
 
   useEffect(() => {
-    const savedUser = localStorage.getItem("gsm-weather-user")
-    if (savedUser) {
-      setUser(JSON.parse(savedUser))
-    }
-    setIsLoading(false)
+    const saved = localStorage.getItem("gsm-weather-user")
+    if (saved) setUser(JSON.parse(saved))
+    setReady(true)
   }, [])
 
-  const handleLogin = (userData: UserData) => {
-    localStorage.setItem("gsm-weather-user", JSON.stringify(userData))
-    setUser(userData)
+  const handleLogin = (data: UserData) => {
+    localStorage.setItem("gsm-weather-user", JSON.stringify(data))
+    setUser(data)
   }
 
   const handleLogout = () => {
     localStorage.removeItem("gsm-weather-user")
     localStorage.removeItem("gsm-weather-cache")
-    localStorage.removeItem("gsm-sms-queue")
+    localStorage.removeItem("gsm-sms-history")
+    localStorage.removeItem("gsm-chat-history")
     setUser(null)
   }
 
-  if (isLoading) {
+  if (!ready) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="flex flex-col items-center gap-6">
+      <main className="min-h-dvh bg-background flex items-center justify-center">
+        <div className="flex flex-col items-center gap-5">
           <div className="relative">
-            <div className="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center">
-              <Radio className="w-10 h-10 text-primary animate-signal-pulse" />
+            <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center">
+              <Radio className="w-8 h-8 text-primary animate-signal-pulse" />
             </div>
-            <div
-              className="absolute -inset-2 rounded-3xl border border-primary/20 animate-ping"
-              style={{ animationDuration: "2s" }}
-            />
           </div>
           <div className="text-center">
-            <p className="text-foreground font-medium">GSM Weather Station</p>
-            <p className="text-muted-foreground text-sm mt-1">Initializing system...</p>
+            <p className="text-sm font-medium text-foreground">GSM WeatherLink</p>
+            <p className="text-xs text-muted-foreground mt-1">Initializing...</p>
           </div>
         </div>
-      </div>
+      </main>
     )
   }
 
-  if (!user) {
-    return <OnboardingScreen onLogin={handleLogin} />
-  }
-
-  return <WeatherDashboard user={user} onLogout={handleLogout} />
+  if (!user) return <OnboardingScreen onLogin={handleLogin} />
+  return <AppShell user={user} onLogout={handleLogout} />
 }

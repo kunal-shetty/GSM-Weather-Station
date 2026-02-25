@@ -203,6 +203,14 @@ GSM Weather Monitor v1.0`
             </pre>
           </div>
 
+          {/* Simulation Notice */}
+          <div className="flex items-start gap-2 p-3 rounded-xl bg-info/10 border border-info/20">
+            <Zap className="w-4 h-4 text-info flex-shrink-0 mt-0.5" />
+            <p className="text-xs text-muted-foreground">
+              <span className="text-info font-medium">Demo Mode:</span> This simulates GSM SIM800L module transmission.
+              In production, this sends actual SMS via AT commands.
+            </p>
+          </div>
         </div>
 
         {/* Footer */}
